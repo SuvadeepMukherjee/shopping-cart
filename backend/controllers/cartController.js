@@ -6,7 +6,6 @@ module.exports.getCart = async (req, res, next) => {
   try {
     const { userId } = req.params;
 
-    // Fetch cart and populate product details
     const cart = await Cart.findOne({ userId }).populate("items.product");
 
     if (!cart || !cart.items.length) {
@@ -38,14 +37,11 @@ module.exports.addToCart = async (req, res, next) => {
     const { userId, productId, quantity } = req.body;
     console.log(userId, productId, quantity);
 
-    // Validate input
     if (!userId || !productId || quantity <= 0) {
       return res.status(400).json({ message: "Invalid request parameters" });
     }
     console.log("validating input");
 
-    // Check if the product exists
-    //const product = await Product.findById(productId);
     const product = await Product.findOne({ _id: String(productId) });
     if (!product) {
       return res.status(400).json({ message: "Product not found" });
@@ -56,7 +52,6 @@ module.exports.addToCart = async (req, res, next) => {
     // }
     console.log("checked if product exists");
 
-    // Find user's cart or create a new one
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
@@ -67,7 +62,6 @@ module.exports.addToCart = async (req, res, next) => {
     cart.items = cart.items || [];
     console.log(" cart found or created, current items", cart.items);
 
-    // Check if product already exists in cart
     const existingItemIndex = cart.items.findIndex(
       (item) => String(item.product) === String(productId)
     );
@@ -75,14 +69,11 @@ module.exports.addToCart = async (req, res, next) => {
     console.log("checked if product already exist in cart");
 
     if (existingItemIndex !== -1) {
-      // Update quantity if product already exists
       cart.items[existingItemIndex].quantity += quantity;
     } else {
-      // Add new product to cart
       cart.items.push({ product: productId, quantity });
     }
 
-    // Save the updated cart
     await cart.save();
 
     res.status(200).json({ message: "Item added to cart successfully", cart });
@@ -128,11 +119,11 @@ module.exports.removeFromCart = async (req, res) => {
     console.log("item in cart");
 
     if (cart.items[existingItemIndex].quantity > 1) {
-      cart.items[existingItemIndex].quantity -= 1; // Reduce quantity by 1
+      cart.items[existingItemIndex].quantity -= 1;
     } else {
-      cart.items.splice(existingItemIndex, 1); // Remove item from cart
+      cart.items.splice(existingItemIndex, 1);
     }
-    // **Potential Fix: If last item is removed, delete cart**
+
     if (cart.items.length === 0) {
       console.log("Cart is empty, deleting cart...");
       await Cart.deleteOne({ userId }); // Delete cart if empty
@@ -183,14 +174,12 @@ module.exports.totalAmount = async (req, res) => {
       return res.status(400).json({ message: "User ID is required" });
     }
 
-    // Fetch the user's cart
     const cart = await Cart.findOne({ userId }).populate("items.product");
 
     if (!cart) {
       return res.json({ totalAmount: 0 });
     }
 
-    // Calculate the total amount
     let totalAmount = 0;
     for (const item of cart.items) {
       totalAmount += item.product.price * item.quantity;

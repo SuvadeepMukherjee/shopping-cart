@@ -4,7 +4,7 @@ const CartSchema = new mongoose.Schema({
   userId: String,
   items: [
     {
-      product: { type: String, ref: "Product" }, // ✅ Now accepts `id: Number`
+      product: { type: String, ref: "Product" },
       quantity: Number,
     },
   ],

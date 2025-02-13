@@ -1,7 +1,6 @@
 const mongoose = require("mongoose");
 const Cart = require("./models/Cart");
 
-// Connect to MongoDB
 mongoose.connect(
   "mongodb+srv://suvadeepmwork:ewS70jhreFhYpf74@cluster0.fgi6n.mongodb.net/shopDB?retryWrites=true&w=majority&appName=Cluster0",
   {
@@ -10,7 +9,6 @@ mongoose.connect(
   }
 );
 
-// Delete all cart items
 Cart.deleteMany({})
   .then(() => {
     console.log("All cart items deleted successfully!");
