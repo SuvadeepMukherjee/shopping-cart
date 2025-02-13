@@ -83,7 +83,7 @@ export const ShopContext = createContext(null);
 
 export const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
-  const [totalItems, setTotalItems] = useState(0);
+  //const [totalItems, setTotalItems] = useState(0);
   const userId = "65c96f8a1a2b4c001f3d8e9a";
 
   // Fetch cart from backend
@@ -125,7 +125,7 @@ export const ShopContextProvider = (props) => {
         ...prev,
         [itemId]: (prev[itemId] || 0) + 1,
       }));
-      console.log("fetchCartItems not working");
+      console.log("fetchCartItems  working");
     } catch (error) {
       console.error("Error adding item to cart:", error);
     }
