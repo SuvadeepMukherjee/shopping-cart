@@ -1,6 +1,5 @@
 // This is the frontend code that works fine but doesnt interact with database
 // import React, { createContext, useState } from "react";
-import { PRODUCTS } from "../products";
 
 // //Creating a new context named ShopContext with an initial value of null
 // //ShopContext is used to access the provided values inside other components
@@ -75,7 +74,7 @@ import { PRODUCTS } from "../products";
 //     </ShopContext.Provider>
 //   );
 // };
-
+//import { PRODUCTS } from "../products";
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
@@ -83,7 +82,9 @@ export const ShopContext = createContext(null);
 
 export const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
-  //const [totalItems, setTotalItems] = useState(0);
+  //This part was changed
+  const [totalItems, setTotalItems] = useState(0);
+  //This part was changed
   const userId = "65c96f8a1a2b4c001f3d8e9a";
 
   // Fetch cart from backend
@@ -104,10 +105,26 @@ export const ShopContextProvider = (props) => {
       }, {});
 
       setCartItems(cartData);
+      //changed
+      fetchTotalCartItems();
+      //changed
     } catch (error) {
       console.error("Error fetching cart:", error);
     }
   };
+  //changed
+  // Fetch total cart items
+  const fetchTotalCartItems = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/cart/numberCart?userId=${userId}`
+      );
+      setTotalItems(response.data.totalItems || 0);
+    } catch (error) {
+      console.error("Error fetching cart count:", error);
+    }
+  };
+  //changed
 
   useEffect(() => {
     fetchCartItems();
@@ -126,6 +143,10 @@ export const ShopContextProvider = (props) => {
         [itemId]: (prev[itemId] || 0) + 1,
       }));
       console.log("fetchCartItems  working");
+
+      //changed
+      fetchTotalCartItems();
+      //changed
     } catch (error) {
       console.error("Error adding item to cart:", error);
     }
@@ -153,6 +174,9 @@ export const ShopContextProvider = (props) => {
           updatedCart[itemId] -= 1; // Decrease quantity normally
         }
 
+        //changed
+        fetchTotalCartItems();
+        //changed
         return updatedCart;
       });
     } catch (error) {
