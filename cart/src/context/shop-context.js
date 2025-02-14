@@ -1,80 +1,3 @@
-// This is the frontend code that works fine but doesnt interact with database
-// import React, { createContext, useState } from "react";
-
-// //Creating a new context named ShopContext with an initial value of null
-// //ShopContext is used to access the provided values inside other components
-// export const ShopContext = createContext(null);
-
-// const getDefaultCart = () => {
-//   //Initializing an empty object to represent the cart
-//   let cart = {};
-
-//   for (let i = 1; i < PRODUCTS.length + 1; i++) {
-//     // Setting the initial quantity of each product in the cart to 0.
-//     //to prevent Undefined Errors
-//     cart[i] = 0;
-//   }
-//   return cart;
-// };
-
-// /*
-// ShopContextProvider manages the state
-// and provides it to all components inside it.
-// */
-// export const ShopContextProvider = (props) => {
-//   // Creating a state variable cartItems and initializing it with an empty cart.
-//   const [cartItems, setCartItems] = useState(getDefaultCart());
-
-//   const getTotalCartAmount = () => {
-//     let totalAmount = 0;
-//     for (const item in cartItems) {
-//       if (cartItems[item] > 0) {
-//         let itemInfo = PRODUCTS.find((product) => product.id === Number(item));
-//         totalAmount += cartItems[item] * itemInfo.price;
-//       }
-//     }
-//     return totalAmount;
-//   };
-
-//   // Updating cartItems state by increasing the count of the specified item by 1.
-//   const addToCart = (itemId) => {
-//     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] + 1 }));
-//   };
-
-//   // Updating cartItems state by decreasing the count of the specified item by 1.
-
-//   const removeFromCart = (itemId) => {
-//     setCartItems((prev) => ({ ...prev, [itemId]: prev[itemId] - 1 }));
-//   };
-
-//   // Updating cartItems state by setting a new amount for a specific item.
-//   const updateCartItemCount = (newAmount, itemId) => {
-//     setCartItems((prev) => ({ ...prev, [itemId]: newAmount }));
-//   };
-
-//   // Summing up the total number of items in the cart and returning it.
-//   const getTotalCartItems = () => {
-//     return Object.values(cartItems).reduce((acc, item) => acc + item, 0);
-//   };
-
-//   // Creating an object with all cart-related functions and state to be shared across the application.
-//   const contextValue = {
-//     cartItems,
-//     addToCart,
-//     removeFromCart,
-//     updateCartItemCount,
-//     getTotalCartAmount,
-//     getTotalCartItems,
-//   };
-
-//   // Providing the ShopContext to all child components using the Provider component.
-//   return (
-//     <ShopContext.Provider value={contextValue}>
-//       {props.children}
-//     </ShopContext.Provider>
-//   );
-// };
-//import { PRODUCTS } from "../products";
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
@@ -105,15 +28,13 @@ export const ShopContextProvider = (props) => {
       }, {});
 
       setCartItems(cartData);
-      //changed
+
       fetchTotalCartItems();
-      //changed
     } catch (error) {
       console.error("Error fetching cart:", error);
     }
   };
-  //changed
-  // Fetch total cart items
+
   const fetchTotalCartItems = async () => {
     try {
       const response = await axios.get(
@@ -124,29 +45,28 @@ export const ShopContextProvider = (props) => {
       console.error("Error fetching cart count:", error);
     }
   };
-  //changed
 
   useEffect(() => {
     fetchCartItems();
   }, []);
 
   // Add item to cart
+  //itemId is the product ID of the item being added to the cart(passed as an argument when calling addToCart)
   const addToCart = async (itemId) => {
     try {
       const obj = { userId, productId: itemId, quantity: 1 };
       console.log(obj);
       await axios.post("http://localhost:5000/api/cart/add", obj);
       console.log("Added to cart:", obj);
-      //await fetchCartItems();
+
+      //find the object then update it
       setCartItems((prev) => ({
         ...prev,
         [itemId]: (prev[itemId] || 0) + 1,
       }));
       console.log("fetchCartItems  working ", cartItems);
 
-      //changed
       fetchTotalCartItems();
-      //changed
     } catch (error) {
       console.error("Error adding item to cart:", error);
     }
@@ -164,7 +84,7 @@ export const ShopContextProvider = (props) => {
 
         if (!updatedCart[itemId]) {
           alert("This item is already at 0 and cannot be reduced further.");
-          return prev; // Don't make any changes
+          return prev; // Don't make any changes to obj
         }
 
         if (updatedCart[itemId] === 1) {
@@ -174,9 +94,8 @@ export const ShopContextProvider = (props) => {
           updatedCart[itemId] -= 1; // Decrease quantity normally
         }
 
-        //changed
         fetchTotalCartItems();
-        //changed
+
         return updatedCart;
       });
     } catch (error) {
@@ -212,7 +131,6 @@ export const ShopContextProvider = (props) => {
     cartItems,
     addToCart,
     removeFromCart,
-    //updateCartItemCount,
     getTotalCartAmount,
     getTotalCartItems,
     fetchCartItems,
@@ -224,28 +142,3 @@ export const ShopContextProvider = (props) => {
     </ShopContext.Provider>
   );
 };
-
-// const updateCartItemCount = (newAmount, itemId) => {
-//   setCartItems((prev) => ({ ...prev, [itemId]: newAmount }));
-// };
-
-// const updateCartItemCount = async (itemId, quantity) => {
-//   try {
-//     const obj = { userId, productId: itemId, quantity };
-//     await axios.post("http://localhost:5000/api/cart/updateCart", obj);
-
-//     setCartItems((prev) => {
-//       const updatedCart = { ...prev };
-
-//       if (quantity === 0) {
-//         delete updatedCart[itemId]; // Remove item if quantity is 0
-//       } else {
-//         updatedCart[itemId] = quantity;
-//       }
-
-//       return updatedCart;
-//     });
-//   } catch (error) {
-//     console.error("Error updating cart:", error);
-//   }
-// };
