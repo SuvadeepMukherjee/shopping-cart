@@ -18,18 +18,38 @@ export const Product = (props) => {
         </p>
         <p>Rs{price}</p>
       </div>
-      <button className="addToCartBttn" onClick={() => addToCart(_id)}>
+      <button
+        className="addToCartBttn"
+        onClick={() => {
+          addToCart(_id);
+          // window.location.reload();
+        }}
+      >
         Add To Cart{cartItemAmount > 0 && <>({cartItemAmount})</>}
       </button>
 
       <div className="countHandler">
-        <button onClick={() => removeFromCart(_id)}>-</button>
+        <button
+          onClick={() => {
+            removeFromCart(_id);
+            //window.location.reload();
+          }}
+        >
+          -
+        </button>
         {/* <input
           key={cartItems[_id]}
           value={cartItems[_id]}
           onChange={(e) => updateCartItemCount(Number(e.target.value), _id)}
         /> */}
-        <button onClick={() => addToCart(_id)}>+</button>
+        <button
+          onClick={() => {
+            addToCart(_id);
+            //window.location.reload();
+          }}
+        >
+          +
+        </button>
       </div>
     </div>
   );

@@ -29,7 +29,7 @@ import { ShopContext } from "../context/shop-context";
 import "./navbar.css";
 
 export const Navbar = () => {
-  const { getTotalCartItems } = useContext(ShopContext);
+  const { getTotalCartItems, cartItems } = useContext(ShopContext);
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
@@ -38,8 +38,8 @@ export const Navbar = () => {
       setTotalItems(count);
     };
     fetchTotalItems();
-  }, []);
-
+  }, [cartItems]);
+  console.log(cartItems);
   return (
     <div className="navbar">
       <div className="links">

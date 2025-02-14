@@ -142,7 +142,7 @@ export const ShopContextProvider = (props) => {
         ...prev,
         [itemId]: (prev[itemId] || 0) + 1,
       }));
-      console.log("fetchCartItems  working");
+      console.log("fetchCartItems  working ", cartItems);
 
       //changed
       fetchTotalCartItems();
