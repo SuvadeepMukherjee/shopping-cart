@@ -5,9 +5,7 @@ export const ShopContext = createContext(null);
 
 export const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
-  //This part was changed
   const [totalItems, setTotalItems] = useState(0);
-  //This part was changed
   const userId = "65c96f8a1a2b4c001f3d8e9a";
 
   // Fetch cart from backend
