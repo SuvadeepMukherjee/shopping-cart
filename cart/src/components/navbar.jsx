@@ -25,7 +25,22 @@ export const Navbar = () => {
     };
     fetchTotalItems();
   }, [cartItems]);
-  console.log(cartItems);
+  // console.log(cartItems);
+
+  // Close the profile pop-up when the user clicks anywhere outside of it
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (event.target.closest(".profile-container") === null) {
+        setShowProfile(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
   return (
     <div className="navbar">
       <div className="links">
