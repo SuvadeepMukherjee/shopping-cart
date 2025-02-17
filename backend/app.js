@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const connectDB = require("./config/db");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 app.use(cors());
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use(express.urlencoded({ extended: true })); // Parses query parameters
 app.use("/images", express.static(path.join(__dirname, "public/images")));
 app.use("/api/products", productRoutes);
 app.use("/api/cart", cartRoutes);
+app.use("/api/user", userRoutes);
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,

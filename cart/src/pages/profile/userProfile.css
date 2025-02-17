@@ -1,0 +1,30 @@
+.user-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 700px; /* Match cartItem width */
+  height: 250px; /* Match cartItem height */
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2); /* Match cartItem shadow */
+  border-radius: 25px; /* Match cartItem border-radius */
+  margin: 30px; /* Match cartItem margin */
+  background: white;
+  padding: 20px;
+  color: black;
+  font-size: 20px;
+}
+
+.user-profile p {
+  font-size: 24px; /* Match cart description font size */
+}
+
+.logout-btn {
+  width: 150px; /* Match checkout button width */
+  height: 50px; /* Match checkout button height */
+  background-color: rgb(19, 19, 19); /* Match checkout button background */
+  color: white;
+  border: none;
+  border-radius: 8px; /* Match checkout button border-radius */
+  margin-top: 20px;
+  cursor: pointer;
+}

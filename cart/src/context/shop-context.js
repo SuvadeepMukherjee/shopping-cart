@@ -7,9 +7,10 @@ export const ShopContextProvider = (props) => {
   const [cartItems, setCartItems] = useState({});
   const [totalItems, setTotalItems] = useState(0);
   const userId = "65c96f8a1a2b4c001f3d8e9a";
+  //Made changes for User Profile
+  const [user, setUser] = useState(null);
+  //Made changes for User Profile
 
-  // Fetch cart from backend
-  // fetches the cart data for a specific user from the backend and updates the cart state in the frontend
   const fetchCartItems = async () => {
     try {
       const response = await axios.get(
@@ -53,9 +54,9 @@ export const ShopContextProvider = (props) => {
   const addToCart = async (itemId) => {
     try {
       const obj = { userId, productId: itemId, quantity: 1 };
-      console.log(obj);
+      //console.log(obj);
       await axios.post("http://localhost:5000/api/cart/add", obj);
-      console.log("Added to cart:", obj);
+      //console.log("Added to cart:", obj);
 
       //find the object then update it
       setCartItems((prev) => ({
@@ -124,7 +125,28 @@ export const ShopContextProvider = (props) => {
       return 0;
     }
   };
+
+  //Made changes for User Profile
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:5000/api/user/profile/${userId}`
+        );
+        console.log("response received from user controller");
+        setUser(response.data);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  //Made changes for User Profile
   const contextValue = {
+    //Made changes for user-profile
+    user,
+    //Made changes for user-profile
     userId,
     cartItems,
     addToCart,

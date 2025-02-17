@@ -10,14 +10,7 @@ const {
 
 const router = express.Router();
 
-router.get(
-  "/numberCart",
-  (req, res, next) => {
-    console.log(" numberCart route is hit!");
-    next();
-  },
-  numberCart
-);
+router.get("/numberCart", numberCart);
 router.get("/totalAmount", totalAmount);
 //router.put("/updateCart", updateCart);
 router.post("/add", addToCart);

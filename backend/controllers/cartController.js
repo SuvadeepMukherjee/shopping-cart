@@ -139,13 +139,11 @@ module.exports.removeFromCart = async (req, res) => {
     if (cart.items[existingItemIndex].quantity > 1) {
       cart.items[existingItemIndex].quantity -= 1;
     } else {
-      // If quantity is 1, remove the item from the cart
       cart.items.splice(existingItemIndex, 1);
     }
 
-    // If the cart becomes empty after removal, delete the cart
     if (cart.items.length === 0) {
-      console.log("Cart is empty, deleting cart...");
+      //console.log("Cart is empty, deleting cart...");
       await Cart.deleteOne({ userId }); // Delete cart if empty
       return res.status(200).json({ message: "Cart is now empty", cart: null });
     }
@@ -162,26 +160,26 @@ module.exports.removeFromCart = async (req, res) => {
 module.exports.numberCart = async (req, res) => {
   try {
     const { userId } = req.query;
-    console.log("userId", userId);
+    //console.log("userId", userId);
 
     if (!userId) {
       return res.status(400).json({ message: "User ID is required" });
     }
 
     const cart = await Cart.findOne({ userId });
-    console.log("found cart");
+    //console.log("found cart");
 
     if (!cart || !cart.items.length) {
       return res.status(200).json({ totalItems: 0 });
     }
 
     const totalItems = cart.items.reduce((acc, item) => acc + item.quantity, 0);
-    console.log("totalItems is ", totalItems);
+    //console.log("totalItems is ", totalItems);
 
     res.status(200).json({ totalItems });
-    console.log("send response");
+    //console.log("send response");
   } catch (error) {
-    console.error("Error fetching cart count:", error);
+    //console.error("Error fetching cart count:", error);
     res.status(500).json({ message: "Server error", error });
   }
 };
@@ -207,55 +205,7 @@ module.exports.totalAmount = async (req, res) => {
 
     res.json({ totalAmount });
   } catch (error) {
-    console.error("Error fetching total cart amount:", error);
+    //console.error("Error fetching total cart amount:", error);
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
-// module.exports.updateCart = async (req, res, next) => {
-//   try {
-//     const { userId, productId, quantity } = req.body;
-//     console.log("userId", userId, "productId", productId, "quantity", quantity);
-
-//     if (!userId || !productId || quantity === undefined) {
-//       return res.status(400).json({ message: "Missing required fields." });
-//     }
-//     console.log("Fields are there");
-
-//     if (quantity <= 0) {
-//       return res
-//         .status(400)
-//         .json({ message: "Quantity must be greater than zero." });
-//     }
-//     console.log("quantity greater than zero");
-
-//     let cart = await Cart.findOne({ userId });
-//     console.log("cart found");
-
-//     if (!cart) {
-//       return res.status(404).json({ message: "Cart not found." });
-//     }
-
-//     // const itemIndex = cart.items.findIndex(
-//     //   (item) => item.productId.toString() === productId
-//     // );
-//     const existingItemIndex = cart.items.findIndex(
-//       (item) => String(item.product) === String(productId)
-//     );
-//     console.log("item found");
-
-//     if (existingItemIndex === -1) {
-//       return res.status(404).json({ message: "Item not found in cart." });
-//     }
-//     console.log("item Index found");
-
-//     cart.items[existingItemIndex].quantity = quantity; // Update quantity
-
-//     await cart.save();
-//     res.status(200).json({ message: "Cart updated successfully.", cart });
-//     console.log("response send");
-//   } catch (error) {
-//     console.error("Error updating cart:", error);
-//     res.status(500).json({ message: "Internal server error." });
-//   }
-// };
