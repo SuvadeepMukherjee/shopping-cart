@@ -19,21 +19,14 @@ export const CartItem = (props) => {
           <button
             onClick={() => {
               removeFromCart(_id);
-              //window.location.reload();
             }}
           >
             -
           </button>
-          {/* <input
-            type="number"
-            //key={cartItems[id]}
-            value={cartItems[_id] || 0}
-            onChange={(e) => updateCartItemCount(Number(e.target.value), _id)}
-          /> */}
+
           <button
             onClick={() => {
               addToCart(_id);
-              //window.location.reload();
             }}
           >
             +
