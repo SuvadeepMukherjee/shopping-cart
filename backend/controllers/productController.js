@@ -12,31 +12,31 @@ const getProducts = async (req, res) => {
 
 const getProductQuantityInCart = async (req, res) => {
   try {
-    console.log("hitting the controller");
+    //console.log("entering the controller");
     const { userId } = req.query;
-    console.log("userId is", userId);
+    //console.log("userId is", userId);
 
     if (!userId) {
       return res.status(400).json({ message: "userId is required" });
     }
-    console.log("user id found");
+    // console.log("user id found");
 
     const cart = await Cart.findOne({ userId }).populate("items.product");
-    console.log("cart found");
+    //console.log("cart found");
 
     if (!cart) {
       return res.status(404).json({ message: "Cart not found" });
     }
-    console.log("cart not found");
+    //console.log("cart not found");
 
     const cartItems = cart.items.map((item) => ({
       product: item.product,
       quantity: item.quantity,
     }));
-    console.log("mapped products");
+    //console.log("mapped products");
 
     res.json({ userId, cartItems });
-    console.log("send as response");
+    //console.log("send as response");
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

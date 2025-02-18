@@ -14,7 +14,7 @@ const getUser = async (req, res) => {
     }
 
     res.json({ userId: user.userId });
-    console.log("response send");
+    //console.log("response send");
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });

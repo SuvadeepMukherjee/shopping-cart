@@ -52,7 +52,7 @@ module.exports.addToCart = async (req, res, next) => {
     if (!product) {
       return res.status(400).json({ message: "Product not found" });
     }
-    console.log("found product");
+    //console.log("found product");
     // if (!product) {
     //   return res.status(404).json({ message: "Product not found" });
     // }
