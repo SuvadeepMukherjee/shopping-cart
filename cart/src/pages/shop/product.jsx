@@ -1,15 +1,17 @@
 import React, { useContext } from "react";
 import { ShopContext } from "../../context/shop-context";
 
+// Product component receives props as input
 export const Product = (props) => {
   const { _id, productName, price, productImage } = props.data;
 
   const { addToCart, removeFromCart, cartItems } = useContext(ShopContext);
-  // const { addToCart, removeFromCart, updateCartItemCount, cartItems } =
-  //   useContext(ShopContext);
+
+  // Getting the current amount of the item in the cart from the cartItems object
   const cartItemAmount = cartItems[_id];
 
   return (
+    // Container for each product's display
     <div className="product">
       <img src={productImage} alt={productName} />
       <div className="description">
@@ -21,31 +23,27 @@ export const Product = (props) => {
       <button
         className="addToCartBttn"
         onClick={() => {
+          // Calling the addToCart function from context when the button is clicked, passing the product _id
           addToCart(_id);
-          // window.location.reload();
         }}
       >
+        {/* Display "Add To Cart" button with a count of the cart item if it's greater than 0 */}
         Add To Cart{cartItemAmount > 0 && <>({cartItemAmount})</>}
       </button>
 
+      {/* Container for the count handler buttons to adjust the cart item quantity */}
       <div className="countHandler">
         <button
           onClick={() => {
             removeFromCart(_id);
-            //window.location.reload();
           }}
         >
           -
         </button>
-        {/* <input
-          key={cartItems[_id]}
-          value={cartItems[_id]}
-          onChange={(e) => updateCartItemCount(Number(e.target.value), _id)}
-        /> */}
+
         <button
           onClick={() => {
             addToCart(_id);
-            //window.location.reload();
           }}
         >
           +
