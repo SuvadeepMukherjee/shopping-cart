@@ -3,9 +3,22 @@ const Cart = require("../models/Cart");
 
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    //console.log("entering controller");
+    const { category } = req.query;
+    //console.log("category", category);
+    let query = {};
+
+    if (category && category !== "all") {
+      query.category = category;
+    }
+    //console.log("query", query);
+
+    const products = await Product.find(query);
+    //console.log("finding products", products);
     res.json(products);
+    //console.log("response send");
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Error fetching products" });
   }
 };
