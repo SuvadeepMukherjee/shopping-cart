@@ -8,7 +8,7 @@ export const Product = (props) => {
   const { addToCart, removeFromCart, cartItems } = useContext(ShopContext);
 
   // Getting the current amount of the item in the cart from the cartItems object
-  const cartItemAmount = cartItems[_id];
+  const cartItemAmount = cartItems[_id]?.quantity || 0;
 
   return (
     // Container for each product's display

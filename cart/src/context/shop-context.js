@@ -23,7 +23,7 @@ export const ShopContextProvider = (props) => {
       // productId is the key and quantity is the value
       const cartData = response.data.items.reduce((acc, item) => {
         if (item.productId) {
-          acc[item.productId] = item.quantity;
+          acc[item.productId] = item;
         }
         return acc;
       }, {});
@@ -62,15 +62,28 @@ export const ShopContextProvider = (props) => {
 
       await axios.post("http://localhost:5000/api/cart/add", obj);
 
+      //if an existing product exists then increase the quantity on the existing product
+      //if existing product does not exist then create a new object  (i am creating a new object at all instances)
       //find the object then update it
       // Update the cartItems state:
       // - Copy previous cart items
       // - Increment the quantity for the added product (or set to 1 if it's new)
-      setCartItems((prev) => ({
-        ...prev,
-        [itemId]: (prev[itemId] || 0) + 1,
-      }));
-      //console.log("fetchCartItems  working ", cartItems);
+      // setCartItems((prev) => ({
+      //   ...prev,
+      //   [itemId]: (prev[itemId] || 0) + 1,
+      // }));
+      setCartItems((prev) => {
+        if (prev[itemId]) {
+          return {
+            ...prev,
+            [itemId]: { ...prev[itemId], quantity: prev[itemId].quantity + 1 },
+          };
+        } else {
+          // If product does not exist, create a new object
+          return { ...prev, quantity: 1 };
+        }
+      });
+
       // Fetch and update the total cart item count
       fetchTotalCartItems();
     } catch (error) {
@@ -78,6 +91,7 @@ export const ShopContextProvider = (props) => {
     }
   };
 
+  console.log("fetchCartItems  working ", cartItems);
   //itemId is the product ID of the item being added to the cart(passed as an argument when calling addToCart)
   const removeFromCart = async (itemId) => {
     try {
@@ -87,6 +101,7 @@ export const ShopContextProvider = (props) => {
       });
       // Update the cartItems state
       setCartItems((prev) => {
+        console.log(prev);
         // Copy previous cart state
         const updatedCart = { ...prev };
 
@@ -100,7 +115,10 @@ export const ShopContextProvider = (props) => {
           alert("This item is already at 1. Removing it completely.");
           delete updatedCart[itemId]; // Remove item from  state
         } else {
-          updatedCart[itemId] -= 1; // Decrease quantity normally
+          updatedCart[itemId] = {
+            ...updatedCart[itemId],
+            quantity: updatedCart[itemId].quantity - 1,
+          };
         }
         // Fetch and update the total cart item count
         fetchTotalCartItems();
