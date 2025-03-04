@@ -121,6 +121,7 @@ export const ShopContextProvider = (props) => {
           };
         }
         // Fetch and update the total cart item count
+        console.log("updatedCart", updatedCart);
         fetchTotalCartItems();
 
         return updatedCart;
